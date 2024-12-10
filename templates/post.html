@@ -1,0 +1,267 @@
+{% extends "layout.html" %}
+{% block body %}
+
+  <!-- Page Header -->
+  <header class="masthead mb-0" style="background-image: url('{{url_for('static',filename='img/pic2.jpg')}}')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>Your Orders</h1>
+            <h2 class="subheading">Medicines</h2>
+            <span class="meta">
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  {% with messages=get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="chartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Chart</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Chart Container -->
+          <canvas id="medicineAmountChart" style="width: 100%; height: 100%;"></canvas>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--  Add a filter button  -->
+<div class="container">
+  <button type="button" class="btn btn-primary" id="filterButton" style="margin: 10px;">
+    Filter by User Type
+  </button>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Function to handle filter button click
+  document.getElementById('filterButton').addEventListener('click', function() {
+    // Prompt the user to select a user type
+    var userType = prompt("Enter the lesser than value(10, 20, 30, 40, 50, 60 ,70, 80, 90, 100)");
+    if (userType) {
+      // Loop through table rows
+      var rows = document.querySelectorAll('tbody tr');
+      rows.forEach(function(row) {
+        var userTypeCell = row.querySelector('td:nth-child(5)').textContent;
+        // Check if user type matches the filter
+        if (userTypeCell.toLowerCase().includes(userType.toLowerCase())) {
+          row.style.display = ''; // Show row if user type matches
+        } else {
+          row.style.display = 'none'; // Hide row if user type does not match
+        }
+        /* if (userType < '10') {
+          alert('Alegra M'); // Show row if user type matches or filter is set to 'all'
+        }
+        if (userType < '20') {
+          alert('Alegra M, B+ Blood,  Sinarest,  Paracetamol, Hatric'); // Show row if user type matches or filter is set to 'all'
+        }
+        if (userType < '30') {
+          alert('Alegra M, B+ Blood,  Sinarest,  Paracetamol, Hatric'); // Show row if user type matches or filter is set to 'all'
+        }
+        if (userType < '40') {
+          alert('Alegra M, B+ Blood,  Sinarest,  Paracetamol, Hatric'); // Show row if user type matches or filter is set to 'all'
+        }
+        if (userType < '50') {
+          alert('Alegra M, B+ Blood,  Sinarest,  Paracetamol, Hatric, Matron'); // Show row if user type matches or filter is set to 'all'
+        }
+        if (userType < '60') {
+          alert('Alegra M, B+ Blood,  Sinarest,  Paracetamol, Hatric, Matron, Dolo 650'); // Show row if user type matches or filter is set to 'all'
+        }
+        if (userType < '70') {
+          alert('Alegra M, B+ Blood,  Sinarest,  Paracetamol, Hatric, Matron, Dolo 650 ,Citrizen'); // Show row if user type matches or filter is set to 'all'
+        }
+        if (userType < '80') {
+          alert('Alegra M, B+ Blood,  Sinarest,  Paracetamol, Hatric, Matron, Dolo 650 ,Citrizen'); // Show row if user type matches or filter is set to 'all'
+        }
+        if (userType < '90') {
+          alert('Alegra M, B+ Blood,  Sinarest,  Paracetamol, Hatric, Matron, Dolo 650 ,Citrizen'); // Show row if user type matches or filter is set to 'all'
+        }
+        if (userType < '100') {
+          alert('Alegra M, B+ Blood,  Sinarest,  Paracetamol, Hatric, Matron, Dolo 650 ,Citrizen, Mero'); // Show row if user type matches or filter is set to 'all'
+        } */
+
+      });
+    }
+  });
+});
+</script>
+
+
+
+<!--
+
+<div class="container">
+  <button type="button" class="btn btn-primary" id="filterButton" style="margin: 10px;">
+    Filter by Quantity
+  </button>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Function to handle filter button click
+    document.getElementById('filterButton').addEventListener('click', function() {
+      // Prompt the user to enter the quantity
+      var quantity = prompt("Enter the quantity to filter for values greater than:");
+      if (quantity) {
+        // Convert the input quantity to a number
+        var filterQuantity = parseInt(quantity);
+        
+        // Check if the input is a valid number
+        if (!isNaN(filterQuantity)) {
+          // Loop through table rows
+          var rows = document.querySelectorAll('tbody tr');
+          rows.forEach(function(row) {
+            var rowQuantity = parseInt(row.querySelector('td:nth-child(5)').textContent);
+            // Check if the row quantity is greater than the filter quantity
+            if (rowQuantity > filterQuantity) {
+              row.style.display = ''; // Show row if quantity is greater than the filter quantity
+            } 
+            else if(filterQuantity = 2){
+              alert('BCNF'); // Hide row if quantity is not greater than the filter quantity
+            }
+            else{
+              row.style.display = 'none';
+            }
+          });
+        } else {
+          alert('Invalid input. Please enter a valid number.');
+        }
+      }
+    });
+  });
+</script>
+
+-->
+
+<!--select medicine from addmp where CAST(amount as INTEGER) < 50;-->
+
+
+
+
+  <!-- Post Content -->
+  <div class="container">
+      <!-- Button to open modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#chartModal" style="margin: 10px; float: right;">
+      View Chart
+    </button> 
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th>Mid</th>
+          <th>Medicines</th>
+          
+          <th>Disease</th>
+          <th>Quantity</th>
+          <th>Ordered By</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for post in posts %}
+        <tr>
+          <td>{{post.mid}}</td>
+          <td>{{post.medicines}}</td>
+          <!-- <td>{{post.products}}</td> -->
+          <td>{{post.disease}}</td>
+          <td>{{post.amount}}</td>
+          <td>{{post.utype}}: {{post.username}}</td>
+          <td><a href="/deletemp/{{post.id}}"><button onclick="return confirm('Are you sure to Delete data');" class="btn btn-danger">Delete</button></a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    // Extracting data from the table
+    var medicines = [];
+    var amounts = [];
+    {% for post in posts %}
+      medicines.push("{{ post.medicines }}");
+      amounts.push({{ post.amount }});
+    {% endfor %}
+
+    // Chart.js code to create a bar chart
+    var ctx = document.getElementById('medicineAmountChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: medicines,
+        datasets: [{
+          label: 'Amount',
+          data: amounts,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Medicines'
+            }
+          }],
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Amount'
+            },
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        },
+        tooltips: {
+          enabled: true,
+          mode: 'index',
+          intersect: false
+        }
+      }
+    });
+  </script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/clean-blog.min.js"></script>
+
+</body>
+</html>
+{% endblock %}

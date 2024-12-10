@@ -1,0 +1,17 @@
+{
+  "params":
+  {
+   "local_server": "True",
+    "local_uri": "sqlite:///medical.db",
+    "proud_uri": "sqlite:///medical.db",
+    "fb_url":"https://www.facebook.com/ehsaas.rajpurohit.7/",
+    "tw_url":"https://twitter.com/EhsaasRajpuroh1",
+    "gh_url":"https://github.com/ehsaasrajpurohit",
+    "blog_name": "WELCOME",
+    "headname": "IN-HOUSE HOSPITAL MANAGEMENT SYSTEM",
+    "user": "test",
+    "password": "test",
+    "login_image": "pic3.jpg"
+
+  }
+}
